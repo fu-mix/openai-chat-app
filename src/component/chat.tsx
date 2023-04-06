@@ -1,6 +1,11 @@
 import { Configuration, OpenAIApi } from 'openai';
 
-export const Chat = async (message: string, apiKey: string) => {
+export const Chat = async (
+  message: string,
+  apiKey: string,
+  frequency_penalty: number,
+  top_p: number
+) => {
   const configuration = new Configuration({
     // apiKey: import.meta.env.VITE_OPENAI_API_KEY,
     apiKey: apiKey,
@@ -17,18 +22,17 @@ export const Chat = async (message: string, apiKey: string) => {
   //   presence_penalty: 0.0,
   //   stop: ['/'],
   // };
-  console.log('api', import.meta.env.VITE_OPENAI_API_KEY);
+
   try {
     const response = await openai.createChatCompletion({
       model: 'gpt-3.5-turbo',
-      top_p: 0.5,
-      frequency_penalty: 0.5,
+      top_p: top_p,
+      frequency_penalty: frequency_penalty,
       messages: [{ role: 'user', content: message }],
     });
 
     return response.data.choices[0].message?.content;
   } catch (error) {
-    console.log(`GPT error!: + ${error}`);
     return `API error!'+ ${error}`;
   }
 };

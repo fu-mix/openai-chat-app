@@ -1,6 +1,8 @@
 import React, { useState, FC } from 'react';
 import { Chat } from './component/chat';
+import { TemplateForm } from './component/TemplateForm';
 import { SettingModal } from './component/SettingModal';
+import { CustomSlider } from './component/CustomSlider';
 import {
   Button,
   Textarea,
@@ -12,6 +14,7 @@ import {
   Heading,
   Stack,
   useDisclosure,
+  HStack,
 } from '@chakra-ui/react';
 
 const ChatGPT: FC = () => {
@@ -19,7 +22,11 @@ const ChatGPT: FC = () => {
   const [answer, setAnswer] = useState('');
   const [loading, setLoading] = useState(false);
   const [apiKey, setApiKey] = useState('');
+  const [frequency_penalty, setFrequency_penalty] = useState(0.5);
+  const [top_p, setTop_p] = useState(0.5);
+  const [temperature, setTemperature] = useState(0.5);
   const { isOpen, onClose, onOpen } = useDisclosure();
+
   const handleMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
   };
@@ -27,7 +34,7 @@ const ChatGPT: FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLInputElement>) => {
     e.preventDefault();
     setLoading(true);
-    const responseText = await Chat(message, apiKey);
+    const responseText = await Chat(message, apiKey, frequency_penalty, top_p);
 
     if (responseText) {
       setAnswer(responseText);
@@ -37,12 +44,6 @@ const ChatGPT: FC = () => {
 
   return (
     <Container maxW={'5xl'}>
-      <SettingModal
-        setApiKey={setApiKey}
-        isOpen={isOpen}
-        onClose={onClose}
-        onOpen={onOpen}
-      />
       <Stack spacing={{ base: 8, md: 14 }} py={{ base: 20, md: 36 }}>
         <Heading
           fontWeight={600}
@@ -53,24 +54,48 @@ const ChatGPT: FC = () => {
             OpenAI Chat App
           </Text>
         </Heading>
+        <HStack spacing={20}>
+          <form onSubmit={handleSubmit}>
+            <VStack spacing={4}>
+              <label>
+                <Textarea
+                  rows={15}
+                  cols={100}
+                  value={message}
+                  onChange={handleMessageChange}
+                />
+              </label>
 
-        <form onSubmit={handleSubmit}>
-          <VStack spacing={4}>
-            <label>
-              <Textarea
-                rows={10}
-                cols={100}
-                value={message}
-                onChange={handleMessageChange}
+              <Button
+                colorScheme="blue"
+                type="submit"
+                isLoading={loading}
+                disabled={apiKey === ''}
+              >
+                質問する
+              </Button>
+            </VStack>
+          </form>
+
+          <VStack spacing={6}>
+            <HStack spacing={2}>
+              <TemplateForm setMessage={setMessage} />
+              <SettingModal
+                setApiKey={setApiKey}
+                isOpen={isOpen}
+                onClose={onClose}
+                onOpen={onOpen}
               />
-            </label>
+            </HStack>
 
-            <Button colorScheme="blue" type="submit" isLoading={loading}>
-              質問する
-            </Button>
+            <CustomSlider
+              title="Frequency_penalty"
+              setParamter={setFrequency_penalty}
+            />
+            <CustomSlider title="Top P" setParamter={setTop_p} />
+            <CustomSlider title="Temperature" setParamter={setTemperature} />
           </VStack>
-        </form>
-
+        </HStack>
         {answer && (
           <div>
             <Badge fontSize="1.4rem" fontWeight="bold" colorScheme="green">

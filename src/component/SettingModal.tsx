@@ -28,12 +28,11 @@ export const SettingModal: FC<SettingModalProps> = ({
 }) => {
   return (
     <>
-      {/* <Button onClick={onOpen}>Open Modal</Button> */}
       <IconButton
         aria-label="Setting"
         icon={<SettingsIcon />}
         onClick={onOpen}
-        size={'lg'}
+        size={'sm'}
       />
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -48,7 +47,6 @@ export const SettingModal: FC<SettingModalProps> = ({
             <Button colorScheme="blue" mr={3} onClick={onClose}>
               OK
             </Button>
-            {/* <Button variant="ghost">OK</Button> */}
           </ModalFooter>
         </ModalContent>
       </Modal>
