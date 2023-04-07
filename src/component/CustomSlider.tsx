@@ -8,7 +8,11 @@ import {
   Text,
   HStack,
   VStack,
-  Badge,
+  Tag,
+  TagLabel,
+  Flex,
+  Stack,
+  Spacer,
 } from '@chakra-ui/react';
 import type { FC } from 'react';
 import { useState } from 'react';
@@ -25,17 +29,20 @@ export const CustomSlider: FC<CustomSliderProps> = ({ title, setParamter }) => {
     setParamter(value);
   };
   return (
-    <Box w="100%">
-      <VStack spacing={2}>
-        <HStack>
+    <Stack w="100%">
+      <VStack spacing={3}>
+        <HStack w="200px">
           <Text>{title}</Text>
-          <Badge>{sliderValue}</Badge>
+          <Spacer />
+          <Tag>
+            <TagLabel>{sliderValue}</TagLabel>
+          </Tag>
         </HStack>
         <Slider
           defaultValue={0.5}
           step={0.1}
-          min={0}
-          max={1}
+          min={0.0}
+          max={1.0}
           onChange={handleOnChangeTrack}
           colorScheme="green"
         >
@@ -53,6 +60,6 @@ export const CustomSlider: FC<CustomSliderProps> = ({ title, setParamter }) => {
           <SliderThumb />
         </Slider>
       </VStack>
-    </Box>
+    </Stack>
   );
 };
