@@ -4,7 +4,8 @@ export const Chat = async (
   message: string,
   apiKey: string,
   frequency_penalty: number,
-  top_p: number
+  top_p: number,
+  temperature: number
 ) => {
   const configuration = new Configuration({
     // apiKey: import.meta.env.VITE_OPENAI_API_KEY,
@@ -28,6 +29,7 @@ export const Chat = async (
       model: 'gpt-3.5-turbo',
       top_p: top_p,
       frequency_penalty: frequency_penalty,
+      temperature: temperature,
       messages: [{ role: 'user', content: message }],
     });
 

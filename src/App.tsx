@@ -34,7 +34,13 @@ const ChatGPT: FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLInputElement>) => {
     e.preventDefault();
     setLoading(true);
-    const responseText = await Chat(message, apiKey, frequency_penalty, top_p);
+    const responseText = await Chat(
+      message,
+      apiKey,
+      frequency_penalty,
+      top_p,
+      temperature
+    );
 
     if (responseText) {
       setAnswer(responseText);
