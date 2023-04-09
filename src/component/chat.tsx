@@ -1,17 +1,19 @@
 import { Configuration, OpenAIApi } from 'openai';
-
+import type { ConversationAI } from '../App';
+import { ChatCompletionRequestMessageRoleEnum } from 'openai';
 export const Chat = async (
   message: string,
   apiKey: string,
   frequency_penalty: number,
   top_p: number,
-  temperature: number
+  temperature: number,
+  conversation: ConversationAI[]
 ) => {
   const configuration = new Configuration({
     // apiKey: import.meta.env.VITE_OPENAI_API_KEY,
     apiKey: apiKey,
   });
-  console.log('configuration', configuration);
+
   const openai = new OpenAIApi(configuration);
 
   // const options = {
@@ -30,7 +32,11 @@ export const Chat = async (
       top_p: top_p,
       frequency_penalty: frequency_penalty,
       temperature: temperature,
-      messages: [{ role: 'user', content: message }],
+      // messages: [{ role: 'user', content: message }],
+      messages: [
+        ...conversation,
+        { role: ChatCompletionRequestMessageRoleEnum.User, content: message },
+      ],
     });
 
     return response.data.choices[0].message?.content;
