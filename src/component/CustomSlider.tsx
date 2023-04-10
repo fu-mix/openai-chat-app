@@ -4,13 +4,11 @@ import {
   SliderFilledTrack,
   SliderTrack,
   SliderThumb,
-  Box,
   Text,
   HStack,
   VStack,
   Tag,
   TagLabel,
-  Flex,
   Stack,
   Spacer,
 } from '@chakra-ui/react';
@@ -20,10 +18,19 @@ import { useState } from 'react';
 interface CustomSliderProps {
   title: string;
   setParamter: (parameter: number) => void;
+  min?: number;
+  max?: number;
+  default?: number;
 }
 
-export const CustomSlider: FC<CustomSliderProps> = ({ title, setParamter }) => {
-  const [sliderValue, setSliderValue] = useState(0.5);
+export const CustomSlider: FC<CustomSliderProps> = ({
+  title,
+  setParamter,
+  min = 0,
+  max = 1,
+  default: defaultValue = 1,
+}) => {
+  const [sliderValue, setSliderValue] = useState(defaultValue);
   const handleOnChangeTrack = (value: number) => {
     setSliderValue(value);
     setParamter(value);
@@ -39,10 +46,10 @@ export const CustomSlider: FC<CustomSliderProps> = ({ title, setParamter }) => {
           </Tag>
         </HStack>
         <Slider
-          defaultValue={0.5}
-          step={0.1}
-          min={0.0}
-          max={1.0}
+          defaultValue={defaultValue}
+          step={0.01}
+          min={min}
+          max={max}
           onChange={handleOnChangeTrack}
           colorScheme="green"
         >

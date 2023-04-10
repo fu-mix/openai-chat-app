@@ -131,6 +131,8 @@ const ChatGPT: FC = () => {
             <CustomSlider
               title="Frequency_penalty"
               setParamter={setFrequency_penalty}
+              min={0}
+              max={2}
             />
             <CustomSlider title="Top P" setParamter={setTop_p} />
             <CustomSlider title="Temperature" setParamter={setTemperature} />
