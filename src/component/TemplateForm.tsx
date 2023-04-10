@@ -1,11 +1,12 @@
 import { Checkbox } from '@chakra-ui/react';
 import type { FC } from 'react';
+import { memo } from 'react';
 
 interface TemplateFromProps {
   setMessage: (message: string) => void;
 }
 
-export const TemplateForm: FC<TemplateFromProps> = ({ setMessage }) => {
+export const TemplateForm: FC<TemplateFromProps> = memo(({ setMessage }) => {
   const template = `#命令書：
 あなたは、〇〇です。
 以下の制約条件と入力文をもとに、〇〇を出力してください
@@ -22,4 +23,4 @@ export const TemplateForm: FC<TemplateFromProps> = ({ setMessage }) => {
     setMessage(template);
   };
   return <Checkbox onChange={handleOnCheck}>Templae</Checkbox>;
-};
+});
