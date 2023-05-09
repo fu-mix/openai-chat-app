@@ -12,6 +12,8 @@ import {
   Stack,
   HStack,
   Spacer,
+  useClipboard,
+  Flex,
 } from '@chakra-ui/react';
 import { ChatCompletionRequestMessageRoleEnum } from 'openai';
 import { Navigation } from './component/Navigation';
@@ -36,7 +38,7 @@ const ChatGPT: FC = () => {
       content: '',
     },
   ]);
-
+  const { onCopy, setValue, hasCopied } = useClipboard('');
   const handleMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
   };
@@ -54,7 +56,8 @@ const ChatGPT: FC = () => {
       temperature,
       conversation,
       setAnswer,
-      setLoading
+      setLoading,
+      setValue
     );
     const newConversation = [
       {
@@ -125,14 +128,22 @@ const ChatGPT: FC = () => {
                   回答
                 </Badge>
                 <Box p={4} borderWidth="1px" borderRadius="lg">
-                  {answer?.split(/\n\n/).map((item, index) => {
-                    return (
-                      <React.Fragment key={index}>
-                        {item}
-                        <br />
-                      </React.Fragment>
-                    );
-                  })}
+                  <Stack>
+                    <Flex justify={'flex-end'}>
+                      <Button size="xs" colorScheme="green" onClick={onCopy}>
+                        {hasCopied ? 'Copyed!' : 'Copy'}
+                      </Button>
+                    </Flex>
+                    <Spacer />
+                    {answer?.split(/\n\n/).map((item, index) => {
+                      return (
+                        <React.Fragment key={index}>
+                          {item}
+                          <br />
+                        </React.Fragment>
+                      );
+                    })}
+                  </Stack>
                 </Box>
               </Box>
             </Stack>

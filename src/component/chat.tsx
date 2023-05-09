@@ -9,7 +9,8 @@ export const Chat = async (
   temperature: number,
   conversation: ConversationAI[],
   setAnswer: (data: string) => void,
-  setLoading: (loading: boolean) => void
+  setLoading: (loading: boolean) => void,
+  setValue: (daa: string) => void
 ): Promise<void> => {
   const configuration = new Configuration({
     // apiKey: import.meta.env.VITE_OPENAI_API_KEY,
@@ -46,6 +47,7 @@ export const Chat = async (
           });
           const arrayJoined = arrayParsed.join('');
           setAnswer(arrayJoined);
+          setValue(arrayJoined);
         },
       }
     );
