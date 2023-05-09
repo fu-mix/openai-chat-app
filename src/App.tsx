@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import type { FC } from 'react';
 import { Chat } from './component/chat';
 import { CustomSlider } from './component/CustomSlider';
@@ -37,7 +37,25 @@ const ChatGPT: FC = () => {
     },
   ]);
 
-  useEffect(() => {
+  const handleMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMessage(e.target.value);
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    if (loading) return;
+    setLoading(true);
+    setPrevMessage(message);
+    Chat(
+      message,
+      apiKey,
+      frequency_penalty,
+      top_p,
+      temperature,
+      conversation,
+      setAnswer,
+      setLoading
+    );
     const newConversation = [
       {
         role: ChatCompletionRequestMessageRoleEnum.Assistant,
@@ -50,31 +68,6 @@ const ChatGPT: FC = () => {
     ];
     setConversation([...conversation, ...newConversation]);
     setMessage('');
-  }, [answer]);
-
-  const handleMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMessage(e.target.value);
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    if (loading) return;
-    setLoading(true);
-
-    const responseText = await Chat(
-      message,
-      apiKey,
-      frequency_penalty,
-      top_p,
-      temperature,
-      conversation
-    );
-
-    if (responseText) {
-      setPrevMessage(message);
-      setAnswer(responseText);
-      setLoading(false);
-    }
   };
 
   return (
@@ -87,7 +80,7 @@ const ChatGPT: FC = () => {
               <VStack spacing={4}>
                 <label>
                   <Textarea
-                    rows={15}
+                    rows={5}
                     cols={100}
                     value={message}
                     onChange={handleMessageChange}
@@ -122,12 +115,7 @@ const ChatGPT: FC = () => {
                 <Badge fontSize="1.4rem" fontWeight="bold" colorScheme="blue">
                   質問
                 </Badge>
-                <Box
-                  p={4}
-                  borderWidth="1px"
-                  borderRadius="lg"
-                  opacity={loading ? 0.5 : 1}
-                >
+                <Box p={4} borderWidth="1px" borderRadius="lg">
                   {prevMessage}
                 </Box>
               </Box>
@@ -136,13 +124,8 @@ const ChatGPT: FC = () => {
                 <Badge fontSize="1.4rem" fontWeight="bold" colorScheme="green">
                   回答
                 </Badge>
-                <Box
-                  p={4}
-                  borderWidth="1px"
-                  borderRadius="lg"
-                  opacity={loading ? 0.5 : 1}
-                >
-                  {answer.split(/\n/).map((item, index) => {
+                <Box p={4} borderWidth="1px" borderRadius="lg">
+                  {answer?.split(/\n\n/).map((item, index) => {
                     return (
                       <React.Fragment key={index}>
                         {item}

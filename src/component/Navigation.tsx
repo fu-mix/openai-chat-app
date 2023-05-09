@@ -42,7 +42,7 @@ export const Navigation: FC<NavigationProps> = ({ setApiKey, setMessage }) => {
                 color={'green.500'}
                 as={'cite'}
               >
-                OpenAI Chat App
+                AI Chat App
               </Text>
             </Heading>
           </Flex>
